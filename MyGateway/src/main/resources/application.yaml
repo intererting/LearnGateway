@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: MyGateway
+
+  cloud:
+    gateway:
+      routes:
+        # 路由标识（id：标识，具有唯一性）   简单尝试
+        - id: route_simple
+          # 目标服务地址（uri：地址，请求转发后的地址）
+          uri: http://localhost:8081
+          # 路由条件（predicates：断言，匹配 HTTP 请求内容）
+          predicates:
+            ## 转发地址格式为 uri/archive
+            - Path=/prefix/test
+            #限定为GET请求
+            - Method=GET
+          filters:
+            ## 截取路径位数,Path=/prefix/test中的prefix会被截取掉，最后剩下/test
+            - StripPrefix=1
+            #添加请求参数name
+            - AddRequestParameter=name,yuliyang
+
+
+server:
+  port: 8080
